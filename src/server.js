@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
@@ -8,8 +9,6 @@ const connectDB = require('./config/db');
 const app = express();
 const server = http.createServer(app);
 
-// CLIENT_URL có thể nhiều địa chỉ, ngăn cách bằng dấu phẩy.
-// Không đặt CLIENT_URL thì cho mọi nguồn (dùng khi dev).
 const origins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',').map((s) => s.trim())
   : '*';
@@ -25,9 +24,13 @@ io.on('connection', (socket) => {
 app.use(cors({ origin: origins }));
 app.use(express.json());
 
+// Phục vụ ảnh: http://localhost:5000/images/ca-phe.jpg
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/orders', require('./routes/orders'));

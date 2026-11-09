@@ -17,24 +17,25 @@ const ICE = { name: 'Đá', choices: ['Không đá', 'Ít đá', 'Bình thườn
 const DRINK_OPTS = [SIZE, SUGAR, ICE];
 
 const data = {
-  'Cà phê': [
-    ['Cà phê đen', 25000], ['Cà phê sữa', 29000], ['Bạc xỉu', 32000],
-    ['Cappuccino', 45000], ['Latte', 45000], ['Americano', 39000],
+  'Cà Phê': [
+    ['Phin Sữa Đá', 29000, '/images/phin-sua-da.jpg'],
+    ['Phin Đen Đá', 29000, '/images/phin-den-da.jpg'],
+    ['Bạc Xỉu Đá', 29000, '/images/bac-xiu-da.jpg'],
+    ['Phin Sữa Nóng', 29000, '/images/phin-sua-nong.jpg'],
+    ['Phin Đen Nóng', 29000, '/images/phin-den-nong.jpg'],
   ],
   'Trà': [
-    ['Trà đào cam sả', 42000], ['Trà vải', 39000], ['Trà sen vàng', 40000],
-    ['Trà chanh', 29000], ['Trà xanh matcha', 45000],
+    ['Trà Đào Cam Sả', 45000, '/images/tra-dao-cam-xa.jpg'],
+    ['Trà Sen Vàng', 45000, '/images/tra-sen-vang.jpg'],
+    ['Trà Xanh Đá', 39000, '/images/tra-xanh-da.jpg'],
   ],
-  'Sinh tố': [
-    ['Sinh tố bơ', 45000], ['Sinh tố xoài', 42000], ['Sinh tố dâu', 42000],
-    ['Sinh tố mãng cầu', 45000], ['Nước ép cam', 38000],
+  'Freeze': [
+    ['Freeze Trà Xanh', 55000, '/images/freeze-tra-xanh.jpg'],
+    ['Cookies Freeze', 55000, '/images/cookies-freeze.jpg'],
   ],
-  'Bánh': [
-    ['Bánh tiramisu', 42000], ['Bánh croissant', 32000], ['Bánh cheesecake', 45000],
-    ['Bánh brownie', 35000], ['Bánh muffin socola', 30000],
-  ],
-  'Đá xay': [
-    ['Cookie đá xay', 49000], ['Matcha đá xay', 49000], ['Cà phê đá xay', 47000],
+  'Bánh Ngọt': [
+    ['Bánh Tiramisu', 35000, '/images/banh-tiramisu.jpg'],
+    ['Bánh Mì Que', 19000, '/images/banh-mi-que.jpg'],
   ],
 };
 
@@ -56,12 +57,12 @@ async function seed() {
   let count = 0;
   for (const [catName, items] of Object.entries(data)) {
     const cat = await Category.create({ name: catName });
-    const isCake = catName === 'Bánh';
-    const products = items.map(([name, price]) => ({
+    const isCake = catName === 'Bánh Ngọt';
+    const products = items.map(([name, price, image]) => ({
       name,
       price,
       category: CATEGORY_IS_REF ? cat._id : catName,
-      image: `https://placehold.co/400x400?text=${encodeURIComponent(name)}`,
+      image,
       description: `${name} - CaféGo`,
       options: isCake ? [] : DRINK_OPTS,
       available: true,
